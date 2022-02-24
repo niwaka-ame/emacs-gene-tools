@@ -78,12 +78,12 @@
 (defun gene-tools-sce--load-name-to-oln-data ()
   "Load name to OLN data."
   (setq gene-tools-sce-name-to-oln-data (gene-tools-read-into-hash
-                                         "./data/sce/yeast.txt"
+                                         (gene-tools--find-data-file "data/sce/yeast.txt")
                                          "[ ]+" 56 '("Name" "OLN") nil '(57 58))))
 (defun gene-tools-sce--load-deletion-collection-data ()
   "Load deletion collection data."
   (setq gene-tools-sce-deletion-collection-data (gene-tools-read-into-hash
-                                                 "./data/sce/Deletion_primers_PCR_sizes.txt"
+                                                 (gene-tools--find-data-file "data/sce/Deletion_primers_PCR_sizes.txt")
                                                  "\t" nil nil 1 '(2))))
 
 (defun gene-tools-sce--load-GFP-collection-data ()

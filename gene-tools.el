@@ -5,8 +5,7 @@
 ;; Author: Yu Huo <https://github.com/niwaka-ame>
 ;; Maintainer: Yu Huo <yhuo@tuta.io>
 ;; Created: February 24, 2022
-;; Modified: February 24, 2022
-;; Version: 0.0.1
+;; Modified: February 24, 2022 Version: 0.0.1
 ;; Keywords: convenience data
 ;; Homepage: https://github.com/niwaka-ame/emacs-gene-tools
 ;; Package-Requires: ((emacs "24.4"))
@@ -106,6 +105,12 @@
       (org-mode))
     (display-buffer sgd-buffer-name
                     `(display-buffer-at-bottom . ((window-height . ,height))))))
+
+(defun gene-tools--find-data-file (string)
+  "Find curated data file in this repo."
+  (let ((dir (file-name-directory
+              (locate-library "gene-tools.el"))))
+    (concat dir string)))
 
 
 (provide 'gene-tools)
