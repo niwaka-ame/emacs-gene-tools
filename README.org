@@ -1,0 +1,27 @@
+#+TITLE: Gene tools in Emacs
+
+** What's ~gene-tools~?
+
+An interactive UI to query info of a gene in a given species.
+
+Info comes from:
++ Curated local data within this repo;
++ External databases via API.
+
+** Supported species
++ /Saccharomyces cerevisiae/
+
+** Usage
+~M-x gene-tools~: choose organism, and then info to query, and then select gene name.
+
+Note: currently only ~Saccharomyces cerevisiae~ - ~deletion collection~ is roughly implemented.
+
+** Installation
+
+1. Clone or download this repository (path of folder is ~<path-to-gene-tools>~ below).
+
+2. In your ~.emacs~ file (or ~.doom.d/config.el~ if you are using Doom Emacs), add the following lines:
+   #+begin_src elisp
+(add-to-list 'load-path "<path-to-gene-tools>")
+(require 'gene-tools)
+   #+end_src
