@@ -8,13 +8,14 @@ Info comes from:
 + Curated local data within this repo;
 + External databases via API.
 
-** Supported species
+** Supported species and actions
 + /Saccharomyces cerevisiae/
+  + Deletion collection primers
+  + GFP collection primers
+  + Query SGD
 
 ** Usage
-~M-x gene-tools~: choose organism, and then info to query, and then select gene name.
-
-Note: currently only ~Saccharomyces cerevisiae~ - ~deletion collection~ is roughly implemented.
+~M-x gene-tools~: choose organism, and then choose info to query, and then select gene name.
 
 ** Installation
 
