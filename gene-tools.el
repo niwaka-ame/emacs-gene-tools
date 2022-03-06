@@ -21,6 +21,8 @@
 (require 'cl-lib)
 (require 'subr-x)
 
+;;; variables
+
 (defconst gene-tools-supported-organisms-alist
   '(("Saccharomyces cerevisiae" . gene-tools-sce)
     ("Escherichia coli" . gene-tools-eco))
@@ -33,6 +35,8 @@
   nil
   "List of organisms of interest. Only those will show up in the main menu."
   :type 'list)
+
+;;; UI
 
 (defun gene-tools ()
   "Major UI."
@@ -49,6 +53,8 @@
     (progn
       (require source)
       (funcall source))))
+
+;;; file parser
 
 (defun gene-tools-read-into-hash (file &optional sep header colnames keycol skiprows)
   "Read a data FILE into a hash table. Like pandas.read_csv() in Python."
@@ -102,6 +108,8 @@
                     stripped-string)))
             splitted-line)))
 
+;;; helper functions
+
 (defun gene-tools--pop-window (string &optional height)
   "Show the gene info as STRING in a pop-up window with HEIGHT."
   (let ((sgd-buffer-name "*gene-tools-info*")
@@ -114,6 +122,13 @@
       (org-mode))
     (display-buffer sgd-buffer-name
                     `(display-buffer-at-bottom . ((window-height . ,height))))))
+
+(defun gene-tools--show-all-info-of-gene (gene table)
+  "Show all info in TABLE of GENE in a pop-up window."
+  (gene-tools--pop-window
+   (with-temp-buffer
+     (dolist (elt (cl-coerce (gene-tools-get-columns table) 'list) (buffer-string))
+       (insert elt ?\s (gene-tools-gethash gene elt table) ?\n)))))
 
 (defun gene-tools--find-data-file (string)
   "Find curated data file in this repo."
