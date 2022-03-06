@@ -22,6 +22,7 @@
 ;;;
 (require 'gene-tools)
 
+;;; variables
 (defconst gene-tools-sce-action-alist
   '(("deletion collection" . gene-tools-sce-query-deletion-primers)
     ("GFP collection" . gene-tools-sce-query-GFP-primers)
@@ -30,16 +31,46 @@
 (defvar gene-tools-sce-deletion-collection-data nil)
 (defvar gene-tools-sce-GFP-collection-data nil)
 
+;;; UI
+
 (defun gene-tools-sce ()
   "Major UI for Saccharomyces cerevisiae."
-  ;;(interactive)
+  (interactive)
   (let* ((options (mapcar #'car gene-tools-sce-action-alist))
          (choice (completing-read
                   "Choose action: "
                   options)))
     (funcall (cdr (assoc choice gene-tools-sce-action-alist)))))
 
-(defun gene-tools-name-to-oln ()
+;;; action functions
+
+(defun gene-tools-sce-query-deletion-primers ()
+  "Return all info of deletion primers given OLN."
+  ;; (interactive)
+  ;; lazy load
+  (unless gene-tools-sce-deletion-collection-data
+    (gene-tools-sce--load-deletion-collection-data))
+  (let ((table gene-tools-sce-deletion-collection-data)
+        (oln (gene-tools-sce-name-to-oln)))
+    (gene-tools--pop-window
+     (with-temp-buffer
+       (dolist (elt (cl-coerce (gene-tools-get-columns table) 'list) (buffer-string))
+         (insert elt ?\s (gene-tools-gethash oln elt table) ?\n))))))
+
+(defun gene-tools-sce-query-GFP-primers ()
+  "Return all info of GFP primers given OLN."
+  ;; (interactive)
+  ;; lazy load
+  (unless gene-tools-sce-GFP-collection-data
+    (gene-tools-sce--load-GFP-collection-data)))
+
+(defun gene-tools-sce-query-SGD ()
+  "Query gene info of OLN on SGD."
+  (require 'sgd-lookup))
+
+;;; helper functions
+
+(defun gene-tools-sce-name-to-oln ()
   "Translate gene name to OLN."
   ;; lazy load
   (unless gene-tools-sce-name-to-oln-data
@@ -53,27 +84,7 @@
                   t)))
     (gene-tools-gethash choice "OLN" table)))
 
-
-(defun gene-tools-sce-query-deletion-primers ()
-  "Return all info of deletion primers given OLN."
-  ;; (interactive)
-  ;; lazy load
-  (unless gene-tools-sce-deletion-collection-data
-    (gene-tools-sce--load-deletion-collection-data))
-  (let ((table gene-tools-sce-deletion-collection-data)
-        (oln (gene-tools-name-to-oln)))
-    (gene-tools--pop-window (gene-tools-gethash oln "A_confirmation_primer_sequence" table))))
-
-(defun gene-tools-sce-query-GFP-primers ()
-  "Return all info of GFP primers given OLN."
-  ;; (interactive)
-  ;; lazy load
-  (unless gene-tools-sce-GFP-collection-data
-    (gene-tools-sce--load-GFP-collection-data)))
-
-(defun gene-tools-sce-query-SGD ()
-  "Query gene info of OLN on SGD."
-  (require 'sgd-lookup))
+;;; data-loading functions
 
 (defun gene-tools-sce--load-name-to-oln-data ()
   "Load name to OLN data."
