@@ -82,6 +82,10 @@
         (row (gethash key table)))
     (elt row (cl-position column colnames :test 'string=))))
 
+(defun gene-tools-get-columns (table)
+  "Return column names from hash TABLE."
+  (gethash "HEAD" table))
+
 (defun gene-tools--read-line-at-pos (sep)
   "Read line at current position into a vector according to SEP."
   (let ((splitted-line
@@ -89,8 +93,13 @@
                         (line-beginning-position)
                         (line-end-position))
                        sep)))
+    ;; Strip whitespace from string and replace empty string with nil.
     (cl-map 'vector
-            #'(lambda (string) (cl-remove ?\s string))
+            #'(lambda (string)
+                (let ((stripped-string (cl-remove ?\s string)))
+                  (if (string= stripped-string "")
+                      "nil"
+                    stripped-string)))
             splitted-line)))
 
 (defun gene-tools--pop-window (string &optional height)
