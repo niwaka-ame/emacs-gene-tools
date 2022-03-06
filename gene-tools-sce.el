@@ -46,27 +46,26 @@
 
 (defun gene-tools-sce-query-deletion-primers ()
   "Return all info of deletion primers given OLN."
-  ;; (interactive)
   ;; lazy load
   (unless gene-tools-sce-deletion-collection-data
     (gene-tools-sce--load-deletion-collection-data))
   (let ((table gene-tools-sce-deletion-collection-data)
         (oln (gene-tools-sce-name-to-oln)))
-    (gene-tools--pop-window
-     (with-temp-buffer
-       (dolist (elt (cl-coerce (gene-tools-get-columns table) 'list) (buffer-string))
-         (insert elt ?\s (gene-tools-gethash oln elt table) ?\n))))))
+    (gene-tools--show-all-info-of-gene oln table)))
 
 (defun gene-tools-sce-query-GFP-primers ()
   "Return all info of GFP primers given OLN."
-  ;; (interactive)
   ;; lazy load
   (unless gene-tools-sce-GFP-collection-data
-    (gene-tools-sce--load-GFP-collection-data)))
+    (gene-tools-sce--load-GFP-collection-data))
+  (let ((table gene-tools-sce-GFP-collection-data)
+        (oln (gene-tools-sce-name-to-oln)))
+    (gene-tools--show-all-info-of-gene oln table)))
 
 (defun gene-tools-sce-query-SGD ()
   "Query gene info of OLN on SGD."
-  (require 'sgd-lookup))
+  (require 'sgd-lookup)
+  (sgd-lookup (gene-tools-sce-name-to-oln)))
 
 ;;; helper functions
 
@@ -98,7 +97,9 @@
                                                  "\t" nil nil 1 '(2))))
 
 (defun gene-tools-sce--load-GFP-collection-data ()
-  "Load GFP collection data.")
+  "Load GFP collection data."
+  (setq gene-tools-sce-GFP-collection-data (gene-tools-read-into-hash
+                                            (gene-tools--find-data-file "data/sce/yeastGFPOligoSequence.txt"))))
 
 
 (provide 'gene-tools-sce)
