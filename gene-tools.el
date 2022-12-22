@@ -60,7 +60,7 @@
 (defun gene-tools-read-into-hash (file &optional sep header colnames keycol skiprows)
   "Read a data FILE into a hash table, where each row forms key-value pair and each value is a vector.
 Columns of data are seperated by SEP.
-HEADER is the first line to read, and the line to provide column names (unless a list or vector COLNAMES is specified).
+HEADER is the first line to read, and this line provides column names unless a list COLNAMES is specified.
 KEYCOL is the column that generates the key.
 If the line number is in list SKIPROWS, that line will not be read into the hash table."
   (let ((table (make-hash-table :test 'equal :size 10000))
@@ -73,10 +73,11 @@ If the line number is in list SKIPROWS, that line will not be read into the hash
       (forward-line (- header 1))
       ;; COLNAMES overrides HEADER argument.
       (if colnames
-          (puthash "HEAD" (cl-coerce colnames 'vector) table)
+          (progn
+            (puthash "HEAD" (cl-coerce colnames 'vector) table)
+            (forward-line 1))
         (puthash "HEAD" (gene-tools--read-line-at-pos sep) table))
       ;; Go forward and puthash line by line.
-      (forward-line 1)
       (let ((line-number (count-lines (point-min) (point-max))))
         (while (<= (line-number-at-pos) line-number)
           ;; Puthash unless that row is to skip.
