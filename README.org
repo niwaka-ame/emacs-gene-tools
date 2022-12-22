@@ -12,7 +12,7 @@ Info comes from:
 + /Saccharomyces cerevisiae/
   + Deletion collection primers
   + GFP collection primers
-  + Query SGD
+  + Query SGD database (requires [[https://github.com/niwaka-ame/sgd-lookup.el][sgd-lookup.el]])
 
 ** Usage
 ~M-x gene-tools~: choose organism, and then choose info to query, and then select gene name.
@@ -26,3 +26,9 @@ Info comes from:
 (add-to-list 'load-path "<path-to-gene-tools>")
 (require 'gene-tools)
    #+end_src
+
+** Releases
++ Version 0.1.0: Functional for /Saccaromyces cerevisiae/.
+
+** Known issues
++ The package loads relevant local data lazily, which may take a while if the local data file is large.

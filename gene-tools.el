@@ -5,7 +5,8 @@
 ;; Author: Yu Huo <https://github.com/niwaka-ame>
 ;; Maintainer: Yu Huo <yhuo@tuta.io>
 ;; Created: February 24, 2022
-;; Modified: February 24, 2022 Version: 0.0.1
+;; Modified: December 22, 2022
+;; Version: 0.1.0
 ;; Keywords: convenience data
 ;; Homepage: https://github.com/niwaka-ame/emacs-gene-tools
 ;; Package-Requires: ((emacs "24.4"))
@@ -57,7 +58,11 @@
 ;;; file parser
 
 (defun gene-tools-read-into-hash (file &optional sep header colnames keycol skiprows)
-  "Read a data FILE into a hash table. Like pandas.read_csv() in Python."
+  "Read a data FILE into a hash table, where each row forms key-value pair and each value is a vector.
+Columns of data are seperated by SEP.
+HEADER is the first line to read, and the line to provide column names (unless a list or vector COLNAMES is specified).
+KEYCOL is the column that generates the key.
+If the line number is in list SKIPROWS, that line will not be read into the hash table."
   (let ((table (make-hash-table :test 'equal :size 10000))
         (sep (or sep "\t"))
         (header (or header 1))
@@ -130,11 +135,11 @@
      (dolist (elt (cl-coerce (gene-tools-get-columns table) 'list) (buffer-string))
        (insert elt ?\s (gene-tools-gethash gene elt table) ?\n)))))
 
-(defun gene-tools--find-data-file (string)
-  "Find curated data file in this repo."
+(defun gene-tools--find-data-file (file)
+  "Find curated data FILE in this repo."
   (let ((dir (file-name-directory
               (locate-library "gene-tools.el"))))
-    (concat dir string)))
+    (concat dir file)))
 
 
 (provide 'gene-tools)

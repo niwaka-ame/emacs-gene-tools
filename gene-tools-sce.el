@@ -6,7 +6,7 @@
 ;; Maintainer: Yu Huo <yhuo@tuta.io>
 ;; Created: February 24, 2022
 ;; Modified: February 24, 2022
-;; Version: 0.0.1
+;; Version: 0.1.0
 ;; Keywords: convenience data
 ;; Homepage: https://github.com/niwaka-ame/emacs-gene-tools
 ;; Package-Requires: ((emacs "24.4"))
@@ -70,7 +70,7 @@
 ;;; helper functions
 
 (defun gene-tools-sce-name-to-oln ()
-  "Translate gene name to OLN."
+  "Prompt for gene name and translate it to OLN (ordered locus name)."
   ;; lazy load
   (unless gene-tools-sce-name-to-oln-data
     (gene-tools-sce--load-name-to-oln-data))
